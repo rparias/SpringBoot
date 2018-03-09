@@ -1,7 +1,7 @@
 package com.ronaldarias.springboot.app.controllers;
 
-import com.ronaldarias.springboot.app.models.dao.ClienteDAO;
 import com.ronaldarias.springboot.app.models.entity.Cliente;
+import com.ronaldarias.springboot.app.models.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,12 +19,12 @@ import javax.validation.Valid;
 public class ClienteController {
 
     @Autowired
-    private ClienteDAO clienteDAO;
+    private ClienteService clienteService;
 
     @GetMapping("/listar")
     public String listarClientes(Model model){
         model.addAttribute("titulo", "Listado de clientes");
-        model.addAttribute("clientes", clienteDAO.buscarClientes());
+        model.addAttribute("clientes", clienteService.buscarClientes());
         return "listar";
     }
 
@@ -44,7 +44,7 @@ public class ClienteController {
         if(bindingResult.hasErrors())
             return "form";
         else{
-            clienteDAO.guardarCliente(cliente);
+            clienteService.guardarCliente(cliente);
 
             status.setComplete();   //con esto se elimina el objeto cliente de la session
 
@@ -56,7 +56,7 @@ public class ClienteController {
     public String editarCliente(@PathVariable(value="id") Long id, Model model){
         Cliente cliente;
         if(id > 0)
-            cliente = clienteDAO.obtenerCliente(id);
+            cliente = clienteService.obtenerCliente(id);
         else
             return "redirect:/listar";
         model.addAttribute("cliente", cliente);
@@ -69,7 +69,7 @@ public class ClienteController {
     public String eliminarCliente(@PathVariable(value="id") Long id){
 
         if(id > 0)
-            clienteDAO.eliminarCliente(id);
+            clienteService.eliminarCliente(id);
 
         return "redirect:/listar";
     }
