@@ -17,24 +17,28 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     @Transactional(readOnly = true)
     public List<Cliente> buscarClientes() {
-        return clienteDAO.buscarClientes();
+        //metodo heredado de CrudRepository
+        return (List<Cliente>) clienteDAO.findAll();
     }
 
     @Override
     @Transactional
     public void guardarCliente(Cliente cliente) {
-        clienteDAO.guardarCliente(cliente);
+        //metodo heredado de CrudRepository
+        clienteDAO.save(cliente);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Cliente obtenerCliente(Long id) {
-        return clienteDAO.obtenerCliente(id);
+        //metodo heredado de CrudRepository
+        return clienteDAO.findOne(id);
     }
 
     @Override
     @Transactional
     public void eliminarCliente(Long id) {
-        clienteDAO.eliminarCliente(id);
+        //metodo heredado de CrudRepository
+        clienteDAO.delete(id);
     }
 }
