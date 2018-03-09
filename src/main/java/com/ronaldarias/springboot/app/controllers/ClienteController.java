@@ -33,8 +33,9 @@ public class ClienteController {
     }
 
     @PostMapping("/form")
-    public String guardarCliente(@Valid Cliente cliente, BindingResult bindingResult){
+    public String guardarCliente(@Valid Cliente cliente, BindingResult bindingResult, Model model){
 
+        model.addAttribute("titulo", "Formulario de Cliente");
         //los resultados de @Valid se colocan en el bindingResult
         if(bindingResult.hasErrors())
             return "form";

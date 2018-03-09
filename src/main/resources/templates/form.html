@@ -27,6 +27,15 @@
 
 <div class="container">
     <h1 class="text-secondary" th:text="${titulo}"></h1>
+
+    <!-- lista de los campos con errores -->
+    <div th:object="${cliente}" th:remove="tag">
+        <ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger"
+            role="alert">
+            <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+        </ul>
+    </div>
+
     <!-- action es a que metodo se dirige, object es el parametro q envia -->
     <form th:action="@{/form}" th:object="${cliente}" method="post">
         <div class="form-group row">
