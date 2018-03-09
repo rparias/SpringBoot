@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <title th:text="${titulo}">Title</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"/>
@@ -29,24 +29,46 @@
     <h1 class="text-secondary" th:text="${titulo}"></h1>
     <!-- action es a que metodo se dirige, object es el parametro q envia -->
     <form th:action="@{/form}" th:object="${cliente}" method="post">
-        <table>
-            <tr>
-                <td>Nombre</td>
-                <td><input type="text" th:field="*{nombre}"/></td>
-            </tr>
-            <tr>
-                <td>Apellido</td>
-                <td><input type="text" th:field="*{apellido}"/></td>
-            </tr>
-            <tr>
-                <td>Email</td>
-                <td><input type="email" th:field="*{email}"/></td>
-            </tr>
-            <tr>
-                <td><input type="submit" value="Crear Cliente" class="btn btn-primary"/></td>
-            </tr>
-        </table>
-        <input type="hidden" th:field="*{id}"/>
+        <div class="form-group row">
+            <label for="nombre" class="col-sm-2 col-form-label">Nombre</label>
+            <div class="col-sm-6">
+                <input type="text" th:field="*{nombre}" class="form-control"
+                       th:errorclass="'form-control alert-danger'"/>
+                <small class="form-text text-danger" th:if="${#fields.hasErrors('nombre')}"
+                       th:errors="*{nombre}"></small>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="apellido" class="col-sm-2 col-form-label">Apellido</label>
+            <div class="col-sm-6">
+                <input type="text" th:field="*{apellido}" class="form-control"
+                       th:errorclass="'form-control alert-danger'"/>
+                <small class="form-text text-danger" th:if="${#fields.hasErrors('apellido')}"
+                       th:errors="*{apellido}"></small>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="email" class="col-sm-2 col-form-label">Email</label>
+            <div class="col-sm-6">
+                <input type="email" th:field="*{email}" class="form-control"
+                       th:errorclass="'form-control alert-danger'"/>
+                <small class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="createAt" class="col-sm-2 col-form-label">Fecha</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" th:field="*{createAt}"
+                       th:errorclass="'form-control alert-danger'"/>
+                <small class="form-text text-danger" th:if="${#fields.hasErrors('createAt')}"
+                       th:errors="*{createAt}"></small>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-6">
+                <input type="submit" value="Crear Cliente" class="btn btn-primary"/>
+            </div>
+        </div>
     </form>
 </div>
 
