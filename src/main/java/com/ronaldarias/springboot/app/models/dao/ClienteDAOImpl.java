@@ -19,4 +19,10 @@ public class ClienteDAOImpl implements ClienteDAO {
     public List<Cliente> buscarClientes() {
         return em.createQuery("from Cliente").getResultList();
     }
+
+    @Override
+    @Transactional
+    public void guardarCliente(Cliente cliente) {
+        em.persist(cliente);
+    }
 }
