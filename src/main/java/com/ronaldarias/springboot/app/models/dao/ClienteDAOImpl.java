@@ -23,6 +23,14 @@ public class ClienteDAOImpl implements ClienteDAO {
     @Override
     @Transactional
     public void guardarCliente(Cliente cliente) {
-        em.persist(cliente);
+        if(cliente.getId() != null && cliente.getId() > 0)
+            em.merge(cliente);
+        else
+            em.persist(cliente);
+    }
+
+    @Override
+    public Cliente obtenerCliente(Long id) {
+        return em.find(Cliente.class, id);
     }
 }

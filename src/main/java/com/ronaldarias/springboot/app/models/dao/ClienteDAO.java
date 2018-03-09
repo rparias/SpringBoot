@@ -5,6 +5,7 @@ import com.ronaldarias.springboot.app.models.entity.Cliente;
 import java.util.List;
 
 public interface ClienteDAO {
-    public List<Cliente> buscarClientes();
-    public void guardarCliente(Cliente cliente);
+    List<Cliente> buscarClientes();
+    void guardarCliente(Cliente cliente);
+    Cliente obtenerCliente(Long id);
 }
