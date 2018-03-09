@@ -8,4 +8,5 @@ public interface ClienteDAO {
     List<Cliente> buscarClientes();
     void guardarCliente(Cliente cliente);
     Cliente obtenerCliente(Long id);
+    void eliminarCliente(Long id);
 }
