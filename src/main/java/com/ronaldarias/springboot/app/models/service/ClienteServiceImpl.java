@@ -3,6 +3,8 @@ package com.ronaldarias.springboot.app.models.service;
 import com.ronaldarias.springboot.app.models.dao.ClienteDAO;
 import com.ronaldarias.springboot.app.models.entity.Cliente;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +21,11 @@ public class ClienteServiceImpl implements ClienteService {
     public List<Cliente> buscarClientes() {
         //metodo heredado de CrudRepository
         return (List<Cliente>) clienteDAO.findAll();
+    }
+
+    @Override
+    public Page<Cliente> buscarClientes(Pageable pageable) {
+        return clienteDAO.findAll(pageable);
     }
 
     @Override
