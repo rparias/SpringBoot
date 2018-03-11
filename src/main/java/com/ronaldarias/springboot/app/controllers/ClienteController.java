@@ -12,9 +12,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Controller
 @SessionAttributes("cliente")   //sirve para mantener los datos del cliente hasta q status.setComplete() en editar
@@ -24,7 +29,7 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @GetMapping("/listar")
-    public String listarClientes(@RequestParam(name = "page", defaultValue = "0") int page, Model model){
+    public String listarClientes(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
 
         //page es la pagina actual
         //size es el numero de elementos por pagina
@@ -41,7 +46,7 @@ public class ClienteController {
     }
 
     @GetMapping("/form")
-    public String crearCliente(Model model){
+    public String crearCliente(Model model) {
         Cliente cliente = new Cliente();
         model.addAttribute("cliente", cliente);
         model.addAttribute("titulo", "Formulario de Cliente");
@@ -49,38 +54,52 @@ public class ClienteController {
     }
 
     @PostMapping("/form")
-    public String guardarCliente(@Valid Cliente cliente, BindingResult bindingResult, Model model, RedirectAttributes flash, SessionStatus status){
+    public String guardarCliente(@Valid Cliente cliente, BindingResult bindingResult, Model model, @RequestParam("file") MultipartFile foto, RedirectAttributes flash, SessionStatus status) {
 
         //los resultados de @Valid se colocan en el bindingResult
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             model.addAttribute("titulo", "Formulario de Cliente");
             return "form";
-        } else{
-            String mensajeFlush = (cliente.getId() != null) ? "Cliente editado exitosamente" : "Cliente creado con éxito";
-
-            clienteService.guardarCliente(cliente);
-
-            status.setComplete();   //con esto se elimina el objeto cliente de la session
-
-            //mensaje para el usuario
-            flash.addAttribute("success", mensajeFlush);
-
-            return "redirect:listar";
         }
+
+        //para almacenar la foto
+        if(!foto.isEmpty()){
+            Path directorioRecursos = Paths.get("src//main//resources//static//uploads");
+            String rootPath = directorioRecursos.toFile().getAbsolutePath();
+            try {
+                byte[] bytes = foto.getBytes();
+                Path rutaCompleta = Paths.get(rootPath + "//" + foto.getOriginalFilename());
+                Files.write(rutaCompleta, bytes);
+                flash.addFlashAttribute("info", "Ha subido correctamente '" + foto.getOriginalFilename() + "'");
+                cliente.setFoto(foto.getOriginalFilename());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        String mensajeFlush = (cliente.getId() != null) ? "Cliente editado exitosamente" : "Cliente creado con éxito";
+
+        clienteService.guardarCliente(cliente);
+
+        status.setComplete();   //con esto se elimina el objeto cliente de la session
+
+        //mensaje para el usuario
+        flash.addFlashAttribute("success", mensajeFlush);
+
+        return "redirect:listar";
     }
 
     @GetMapping("/form/{id}")
-    public String editarCliente(@PathVariable(value="id") Long id, Model model, RedirectAttributes flash){
+    public String editarCliente(@PathVariable(value = "id") Long id, Model model, RedirectAttributes flash) {
         Cliente cliente;
-        if(id > 0){
+        if (id > 0) {
             cliente = clienteService.obtenerCliente(id);
-            if(cliente == null){
-                flash.addAttribute("error", "El cliente no existe");
+            if (cliente == null) {
+                flash.addFlashAttribute("error", "El cliente no existe");
                 return "redirect:/listar";
             }
-        }
-        else{
-            flash.addAttribute("error", "El id del cliente no puede ser cero");
+        } else {
+            flash.addFlashAttribute("error", "El id del cliente no puede ser cero");
             return "redirect:/listar";
         }
 
@@ -91,13 +110,13 @@ public class ClienteController {
     }
 
     @GetMapping("/eliminar/{id}")
-    public String eliminarCliente(@PathVariable(value="id") Long id, RedirectAttributes flash){
+    public String eliminarCliente(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
 
-        if(id > 0){
+        if (id > 0) {
             clienteService.eliminarCliente(id);
 
             //mensaje para el usuario
-            flash.addAttribute("success", "Cliente creado con éxito");
+            flash.addFlashAttribute("success", "Cliente creado con éxito");
         }
 
         return "redirect:/listar";
