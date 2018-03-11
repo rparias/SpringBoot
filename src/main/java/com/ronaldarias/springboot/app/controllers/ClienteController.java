@@ -121,4 +121,19 @@ public class ClienteController {
 
         return "redirect:/listar";
     }
+
+    @GetMapping("/ver/{id}")
+    public String ver(@PathVariable(value = "id") Long id, Model model, RedirectAttributes flash){
+
+        Cliente cliente = clienteService.obtenerCliente(id);
+        if(cliente == null){
+            flash.addFlashAttribute("error", "El cliente no existe en la base de datos");
+            return "redirect:/listar";
+        }
+
+        model.addAttribute("cliente", cliente);
+        model.addAttribute("titulo", "Detalle cliente: " + cliente.getNombre());
+
+        return "ver";
+    }
 }
