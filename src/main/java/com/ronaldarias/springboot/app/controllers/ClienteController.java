@@ -3,6 +3,8 @@ package com.ronaldarias.springboot.app.controllers;
 import com.ronaldarias.springboot.app.models.entity.Cliente;
 import com.ronaldarias.springboot.app.models.service.ClienteService;
 import com.ronaldarias.springboot.app.util.paginator.PageRender;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +22,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.UUID;
 
 @Controller
 @SessionAttributes("cliente")   //sirve para mantener los datos del cliente hasta q status.setComplete() en editar
@@ -27,6 +30,8 @@ public class ClienteController {
 
     @Autowired
     private ClienteService clienteService;
+
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     @GetMapping("/listar")
     public String listarClientes(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
@@ -64,13 +69,21 @@ public class ClienteController {
 
         //para almacenar la foto
         if(!foto.isEmpty()){
-            String rootPath = "C://Users//ronald.arias//Downloads//uploads";
+
+            //creo un nombre unico para cada foto subida
+            String uniqueFileName = UUID.randomUUID().toString() + "_" + foto.getOriginalFilename();
+
+            //con esto se hace una ruta absoluta
+            Path rootPath = Paths.get("uploads").resolve(uniqueFileName);
+            Path rootAbsolutePath = rootPath.toAbsolutePath();
+
+            log.info("rootPath: " + rootPath);
+            log.info("rootAbsolutePath: " + rootAbsolutePath);
+
             try {
-                byte[] bytes = foto.getBytes();
-                Path rutaCompleta = Paths.get(rootPath + "//" + foto.getOriginalFilename());
-                Files.write(rutaCompleta, bytes);
-                flash.addFlashAttribute("info", "Ha subido correctamente '" + foto.getOriginalFilename() + "'");
-                cliente.setFoto(foto.getOriginalFilename());
+                Files.copy(foto.getInputStream(), rootAbsolutePath);
+                flash.addFlashAttribute("info", "Ha subido correctamente '" + uniqueFileName + "'");
+                cliente.setFoto(uniqueFileName);
             } catch (IOException e) {
                 e.printStackTrace();
             }
