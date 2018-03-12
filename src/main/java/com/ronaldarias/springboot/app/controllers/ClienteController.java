@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,6 +33,8 @@ public class ClienteController {
     private ClienteService clienteService;
 
     private final Logger log = LoggerFactory.getLogger(getClass());
+
+    private static final String UPLOADS_FOLDER = "uploads";
 
     @GetMapping("/listar")
     public String listarClientes(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
@@ -70,11 +73,23 @@ public class ClienteController {
         //para almacenar la foto
         if(!foto.isEmpty()){
 
+            if(cliente.getId() != null && cliente.getId() > 0
+                    && cliente.getFoto()!= null && cliente.getFoto().length() > 0){
+
+                Path rootPath = Paths.get(UPLOADS_FOLDER).resolve(cliente.getFoto()).toAbsolutePath();
+                File archivo = rootPath.toFile();
+
+                if(archivo.exists() && archivo.canRead()){
+                    archivo.delete();
+                }
+
+            }
+
             //creo un nombre unico para cada foto subida
             String uniqueFileName = UUID.randomUUID().toString() + "_" + foto.getOriginalFilename();
 
             //con esto se hace una ruta absoluta
-            Path rootPath = Paths.get("uploads").resolve(uniqueFileName);
+            Path rootPath = Paths.get(UPLOADS_FOLDER).resolve(uniqueFileName);
             Path rootAbsolutePath = rootPath.toAbsolutePath();
 
             log.info("rootPath: " + rootPath);
@@ -125,10 +140,21 @@ public class ClienteController {
     public String eliminarCliente(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
 
         if (id > 0) {
+            Cliente cliente = clienteService.obtenerCliente(id);
             clienteService.eliminarCliente(id);
 
             //mensaje para el usuario
-            flash.addFlashAttribute("success", "Cliente creado con éxito");
+            flash.addFlashAttribute("success", "Cliente eliminado con éxito");
+
+            //cuando se elimina el cliente tambien se elimina la foto
+            Path rootPath = Paths.get(UPLOADS_FOLDER).resolve(cliente.getFoto()).toAbsolutePath();
+            File archivo = rootPath.toFile();
+
+            if(archivo.exists() && archivo.canRead()){
+                if(archivo.delete()){
+                    flash.addFlashAttribute("info", "Foto " + cliente.getFoto() + " eliminada con exito");
+                }
+            }
         }
 
         return "redirect:/listar";
