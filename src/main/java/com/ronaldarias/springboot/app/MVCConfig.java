@@ -11,17 +11,17 @@ import java.nio.file.Paths;
 @Configuration
 public class MVCConfig extends WebMvcConfigurerAdapter {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
+//    private final Logger log = LoggerFactory.getLogger(getClass());
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        super.addResourceHandlers(registry);
-
-        String resourcePath = Paths.get("uploads").toAbsolutePath().toUri().toString();
-
-        log.info(resourcePath);
-
-        registry.addResourceHandler("/uploads/**")
-                .addResourceLocations(resourcePath);
-    }
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//        super.addResourceHandlers(registry);
+//
+//        String resourcePath = Paths.get("uploads").toAbsolutePath().toUri().toString();
+//
+//        log.info(resourcePath);
+//
+//        registry.addResourceHandler("/uploads/**")
+//                .addResourceLocations(resourcePath);
+//    }
 }
