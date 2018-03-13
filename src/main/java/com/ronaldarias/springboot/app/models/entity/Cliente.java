@@ -7,10 +7,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
-@Table(name="clientes")
+@Table(name = "clientes")
 public class Cliente implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -36,6 +38,28 @@ public class Cliente implements Serializable {
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date createAt;
+
+    //un cliente tiene varias facturas
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,
+            mappedBy = "cliente")
+    private List<Factura> facturas;
+
+    //metodo auxiliar para agregar facturas
+    public void agregarFactura(Factura factura) {
+        if (facturas == null) {
+            facturas = new ArrayList<>();
+        }
+
+        facturas.add(factura);
+    }
+
+    public List<Factura> getFacturas() {
+        return facturas;
+    }
+
+    public void setFacturas(List<Factura> facturas) {
+        this.facturas = facturas;
+    }
 
     public Long getId() {
         return id;
