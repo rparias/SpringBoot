@@ -41,7 +41,7 @@ public class Cliente implements Serializable {
 
     //un cliente tiene varias facturas
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,
-            mappedBy = "cliente")
+            mappedBy = "cliente", orphanRemoval = true)
     private List<Factura> facturas;
 
     //metodo auxiliar para agregar facturas

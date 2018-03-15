@@ -36,7 +36,7 @@ public class Factura implements Serializable {
     private Cliente cliente;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,
-            mappedBy = "factura")
+            orphanRemoval = true)
     @JoinColumn(name = "factura_id")    //es unidireccional
     private List<ItemFactura> itemsFactura;
 
