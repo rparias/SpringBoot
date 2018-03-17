@@ -1,7 +1,9 @@
 package com.ronaldarias.springboot.app.models.service;
 
 import com.ronaldarias.springboot.app.models.dao.ClienteDAO;
+import com.ronaldarias.springboot.app.models.dao.ProductoDAO;
 import com.ronaldarias.springboot.app.models.entity.Cliente;
+import com.ronaldarias.springboot.app.models.entity.Producto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +16,10 @@ import java.util.List;
 public class ClienteServiceImpl implements ClienteService {
 
     @Autowired
-    ClienteDAO clienteDAO;
+    private ClienteDAO clienteDAO;
+
+    @Autowired
+    private ProductoDAO productoDAO;
 
     @Override
     @Transactional(readOnly = true)
@@ -47,5 +52,10 @@ public class ClienteServiceImpl implements ClienteService {
     public void eliminarCliente(Long id) {
         //metodo heredado de CrudRepository
         clienteDAO.delete(id);
+    }
+
+    @Override
+    public List<Producto> findByNombre(String term) {
+        return productoDAO.findByNombreLikeIgnoreCase("%" + term + "%");
     }
 }

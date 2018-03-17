@@ -1,6 +1,7 @@
 package com.ronaldarias.springboot.app.models.service;
 
 import com.ronaldarias.springboot.app.models.entity.Cliente;
+import com.ronaldarias.springboot.app.models.entity.Producto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -18,4 +19,6 @@ public interface ClienteService {
     Cliente obtenerCliente(Long id);
 
     void eliminarCliente(Long id);
+
+    List<Producto> findByNombre(String term);
 }

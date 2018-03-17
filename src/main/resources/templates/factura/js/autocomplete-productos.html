@@ -5,7 +5,7 @@
 <!-- fragmento con nombre:"javascript" para el autocomplete -->
 <script type="text/javascript" th:fragment="javascript">
 
-    ${document}.ready(function () {
+    $(document).ready(function () {
         $("#buscar_producto").autocomplete({
 
             <!--source muestra los datos en el autocomplete a medida q se escribe-->
@@ -20,7 +20,7 @@
                         response($.map(data, function (item) {
                             return {
                                 value: item.id,
-                                label: item.name,
+                                label: item.nombre,
                                 precio: item.precio,
                             };
                         }));
