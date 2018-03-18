@@ -32,6 +32,12 @@
             select: function (event, ui) {
                 //$("#buscar_producto").val(ui.item.label);
 
+                //pregunto si el producto existe antes de aumentar una linea
+                if(itemsHelper.hasProducto(ui.item.value)){
+                    itemsHelper.incrementaCantidad(ui.item.value, ui.item.precio);
+                    return false;
+                }
+
                 //obtener el contenido html del elemento plantillaItemsFactura
                 //obtiene los tr que estan en el tbody de la tabla en plantilla-items
                 var linea = $("#plantillaItemsFactura").html();
@@ -56,6 +62,23 @@
     var itemsHelper = {
         calcularImporte: function (id, precio, cantidad) {
             $("#total_importe_" + id).html(parseInt(precio) * parseInt(cantidad));
+        },
+        hasProducto: function (id) {
+
+            var resultado = false;
+
+            $('input[name="item_id[]"]').each(function () {
+                if(parseInt(id) == parseInt($(this).val())){
+                    resultado = true;
+                }
+            });
+
+            return resultado;
+        },
+        incrementaCantidad: function (id, precio) {
+            var cantidad = $("#cantidad_" + id).val() ? parseInt($("#cantidad_" + id).val()) : 0;
+            $("#cantidad_" + id).val(++cantidad);
+            this.calcularImporte(id, precio, cantidad);
         }
     }
 
