@@ -43,11 +43,21 @@
                 //agrego la linea al tbody de la tabla
                 $("#cargarItemProductos tbody").append(linea);
 
+                //llamo a la funcion para calcular importe
+                itemsHelper.calcularImporte(ui.item.value, ui.item.precio, 1);
+
                 return false;
             }
 
         });
     });
+
+    //funcion para calcular el importe
+    var itemsHelper = {
+        calcularImporte: function (id, precio, cantidad) {
+            $("#total_importe_" + id).html(parseInt(precio) * parseInt(cantidad));
+        }
+    }
 
 </script>
 
