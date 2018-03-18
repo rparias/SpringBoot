@@ -1,8 +1,10 @@
 package com.ronaldarias.springboot.app.models.service;
 
 import com.ronaldarias.springboot.app.models.dao.ClienteDAO;
+import com.ronaldarias.springboot.app.models.dao.FacturaDAO;
 import com.ronaldarias.springboot.app.models.dao.ProductoDAO;
 import com.ronaldarias.springboot.app.models.entity.Cliente;
+import com.ronaldarias.springboot.app.models.entity.Factura;
 import com.ronaldarias.springboot.app.models.entity.Producto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,6 +22,9 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Autowired
     private ProductoDAO productoDAO;
+
+    @Autowired
+    private FacturaDAO facturaDAO;
 
     @Override
     @Transactional(readOnly = true)
@@ -57,5 +62,17 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public List<Producto> findByNombre(String term) {
         return productoDAO.findByNombreLikeIgnoreCase("%" + term + "%");
+    }
+
+    @Override
+    @Transactional
+    public void saveFactura(Factura factura) {
+        facturaDAO.save(factura);
+    }
+
+    @Override
+    @Transactional
+    public Producto findProductoById(Long id) {
+        return productoDAO.findOne(id);
     }
 }

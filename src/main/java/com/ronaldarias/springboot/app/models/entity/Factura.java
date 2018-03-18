@@ -25,14 +25,11 @@ public class Factura implements Serializable {
     private String observacion;
 
     @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
     @Column(name = "create_at")
     private Date createAt;
 
     //Varias facturas tienen un cliente
-    @ManyToOne(fetch = FetchType.LAZY,
-            cascade = {CascadeType.DETACH, CascadeType.MERGE,
-                    CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne(fetch = FetchType.LAZY)
     private Cliente cliente;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,
