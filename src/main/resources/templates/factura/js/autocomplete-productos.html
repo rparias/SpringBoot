@@ -30,7 +30,19 @@
 
             <!--select se encarga de seleccionar ese valor y posteriormente hacer una tarea-->
             select: function (event, ui) {
-                $("#buscar_producto").val(ui.item.label);
+                //$("#buscar_producto").val(ui.item.label);
+
+                //obtener el contenido html del elemento plantillaItemsFactura
+                //obtiene los tr que estan en el tbody de la tabla en plantilla-items
+                var linea = $("#plantillaItemsFactura").html();
+
+                linea = linea.replace(/{ID}/g, ui.item.value);
+                linea = linea.replace(/{NOMBRE}/g, ui.item.label);
+                linea = linea.replace(/{PRECIO}/g, ui.item.precio);
+
+                //agrego la linea al tbody de la tabla
+                $("#cargarItemProductos tbody").append(linea);
+
                 return false;
             }
 

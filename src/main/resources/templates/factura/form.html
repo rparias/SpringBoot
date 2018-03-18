@@ -47,6 +47,22 @@
                     </div>
                 </div>
 
+                <!-- molde tabla para agregar los productos seleccionados de forma dinamica -->
+                <table th:replace="factura/plantilla-items :: itemsFactura"></table>
+                <!-- los tr del molde de aqui arriba se insertan en la tabla a continuacion con js y jquery -->
+                <table id="cargarItemProductos" class="table table-sm table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <!-- AQUI se insertan los tr del tbody de la plantilla-items -->
+                    </tbody>
+                </table>
+
                 <div class="form-group row">
                     <div class="col-sm-6">
                         <input type="submit" th:value="${titulo}" class="btn btn-secondary"/>
