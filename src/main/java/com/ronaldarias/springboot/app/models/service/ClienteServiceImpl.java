@@ -71,8 +71,14 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Producto findProductoById(Long id) {
         return productoDAO.findOne(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Factura findFacturaById(Long id) {
+        return facturaDAO.findOne(id);
     }
 }
