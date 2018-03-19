@@ -49,10 +49,22 @@
                 </tr>
                 </tbody>
             </table>
+
             <h5 class="float-right">
                 Total
                 <span th:text="${factura.calcularTotal()}" class="badge badge-secondary"></span>
             </h5>
+
+            <div class="card border-info mb-4" style="max-width: 20rem;">
+                <div class="card-header">Observaciones</div>
+                <div class="card-body">
+                    <p class="card-text" th:text="${factura.observacion}"
+                       th:if="${not #strings.isEmpty(factura.observacion)}"></p>
+                    <h4 class="card-title" th:if="${#strings.isEmpty(factura.observacion)}">
+                        No tiene observaciones
+                    </h4>
+                </div>
+            </div>
 
         </div>
     </div>
