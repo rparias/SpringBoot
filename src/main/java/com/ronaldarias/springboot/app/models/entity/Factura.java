@@ -1,7 +1,6 @@
 package com.ronaldarias.springboot.app.models.entity;
 
-import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.format.annotation.DateTimeFormat;
+import javax.validation.constraints.NotEmpty;
 
 import javax.persistence.*;
 import java.io.Serializable;

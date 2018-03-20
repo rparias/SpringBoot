@@ -45,7 +45,7 @@ public class ClienteController {
         //page es la pagina actual
         //size es el numero de elementos por pagina
         int size = 5;
-        Pageable pageRequest = new PageRequest(page, size);
+        Pageable pageRequest = PageRequest.of(page, size);
         Page<Cliente> clientes = clienteService.buscarClientes(pageRequest);
 
         PageRender<Cliente> pageRender = new PageRender<>("/listar", clientes);

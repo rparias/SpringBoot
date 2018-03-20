@@ -49,14 +49,14 @@ public class ClienteServiceImpl implements ClienteService {
     @Transactional(readOnly = true)
     public Cliente obtenerCliente(Long id) {
         //metodo heredado de CrudRepository
-        return clienteDAO.findOne(id);
+        return clienteDAO.findById(id).get();
     }
 
     @Override
     @Transactional
     public void eliminarCliente(Long id) {
         //metodo heredado de CrudRepository
-        clienteDAO.delete(id);
+        clienteDAO.deleteById(id);
     }
 
     @Override
@@ -73,19 +73,19 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     @Transactional(readOnly = true)
     public Producto findProductoById(Long id) {
-        return productoDAO.findOne(id);
+        return productoDAO.findById(id).get();
     }
 
     @Override
     @Transactional(readOnly = true)
     public Factura findFacturaById(Long id) {
-        return facturaDAO.findOne(id);
+        return facturaDAO.findById(id).get();
     }
 
     @Override
     @Transactional
     public void deleteFactura(Long id) {
-        facturaDAO.delete(id);
+        facturaDAO.deleteById(id);
     }
 
     @Override
