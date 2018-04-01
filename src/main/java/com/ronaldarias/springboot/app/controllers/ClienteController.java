@@ -39,7 +39,7 @@ public class ClienteController {
 
     private static final String UPLOADS_FOLDER = "uploads";
 
-    @GetMapping("/listar")
+    @GetMapping({"/listar", "/"})
     public String listarClientes(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
 
         //page es la pagina actual
