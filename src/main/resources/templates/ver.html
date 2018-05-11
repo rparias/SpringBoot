@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymelaf.org/extras/spring-security">
 <head th:replace="layout/layout :: head"></head>
 <body>
 
@@ -11,7 +11,7 @@
         <div class="card-body">
 
             <h4 class="card-title">
-                <a class="btn btn-primary btn-xs" th:href="@{/factura/form/} + ${cliente.id}">Factura</a>
+                <a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary btn-xs" th:href="@{/factura/form/} + ${cliente.id}">Factura</a>
             </h4>
 
             <img th:if="${#strings.length(cliente.foto) > 0}" class="img-thumbnail rounded float-left"
@@ -35,8 +35,8 @@
                     <th>Descripcion</th>
                     <th>Fecha</th>
                     <th>Total</th>
-                    <th>Ver</th>
-                    <th>Eliminar</th>
+                    <th sec:authorize="hasRole('ROLE_ADMIN')">Ver</th>
+                    <th sec:authorize="hasRole('ROLE_ADMIN')">Eliminar</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -45,8 +45,8 @@
                     <td th:text="${factura.descripcion}"></td>
                     <td th:text="${factura.createAt}"></td>
                     <td th:text="${factura.calcularTotal()}"></td>
-                    <td><a class="btn btn-primary btn-xs" th:href="@{'/factura/ver/' + ${factura.id}}" th:text="'detalle'"></a></td>
-                    <td><a class="btn btn-danger btn-xs" th:href="@{'/factura/eliminar/' + ${factura.id}}" th:text="'x'"
+                    <td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-primary btn-xs" th:href="@{'/factura/ver/' + ${factura.id}}" th:text="'detalle'"></a></td>
+                    <td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-danger btn-xs" th:href="@{'/factura/eliminar/' + ${factura.id}}" th:text="'x'"
                             onclick="return confirm('Desea eliminar la factura?')"></a>
                     </td>
                 </tr>
